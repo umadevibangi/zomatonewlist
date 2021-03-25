@@ -181,7 +181,7 @@ class Restaurentdetails extends Component {
                                 {item3.description}
                               </Typography>
                               <Typography className={classes.StatusText}>
-                                {item3.price}
+                               price : {item3.price}
                               </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
