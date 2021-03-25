@@ -66,28 +66,11 @@ class Restaurentdetails extends Component {
     super(props);
     console.log("constructor" + props);
     this.state = {
+      result:{},
       menuItemsList: [],
       rows: [{}],
-      isLoading: false,
-      isOpen: false,
-      showPassword: false,
-      data: {
-        dialogueEmail: "",
-        email: "",
-        password: "",
-      },
-      errors: {
-        email: "",
-        password: "",
-      },
-      rules: {
-        email: {
-          required: true,
-        },
-        password: {
-          required: true,
-        },
-      },
+     
+     
     };
   }
 
@@ -116,6 +99,8 @@ class Restaurentdetails extends Component {
       let res = await axios(config);
       console.log(" Response Success List === " + JSON.stringify(res.data.result.menus));
       const dataObject = res.data.result.menus;
+      this.setState({result:res.data.result});
+      console.log(this.state.result.restaurant_name);
       this.setState({ menuItemsList: dataObject });
 
     } catch (error) {
@@ -123,56 +108,8 @@ class Restaurentdetails extends Component {
       console.log("Response Error == " + JSON.stringify(error));
     }
   }
-  onSignUp = (event) => {
-    this.props.navigateTo("/register");
-  };
-  handleClickShowPassword = () => {
-    this.setState((state) => ({ showPassword: !state.showPassword }));
-    console.log(this.state.showPassword);
-  };
-  handleChange = (event) => {
-    this.setState({
-      ...this.state,
-      data: { ...this.state.data, [event.target.name]: event.target.value },
-      errors: {
-        ...this.state.errors,
-        [event.target.name]: "",
-      },
-    });
-  };
-
-  // handlealert = () => {
-  //   this.setState({
-  //     isOpen: true,
-  //   });
-  // };
-  handlealert = () => {
-    if (this.validate(this.state.rules, this.state.data)) {
-      // this.props.signUp(data);
-    }
-    return false;
-  };
-  handleLogin = (e) => {
-
-    // this.props.navigateTo("/navigationdrawer");
-  };
-  handleClickOpen = () => {
-    this.setState({
-      open: true,
-    });
-  };
-  handleClickClose = () => {
-    this.setState({
-      open: false,
-    });
-  };
-  validate = (rules, data) => {
-    const errors = validator(rules)(data);
-    const hasErrors = find(errors, (error) => error !== "");
-
-    this.setState({ errors });
-    return !hasErrors;
-  };
+  
+  
   render() {
     const { isloading, success, data, isOpen, errors } = this.state;
     const { classes } = this.props;
@@ -186,34 +123,31 @@ class Restaurentdetails extends Component {
 
         <div className={classes.root}>
           <CssBaseline />
-          <Grid item xs={12} md={12}>
-            <Typography className={classes.h6H} variant="h6">
-              <ArrowBackIcon
-                className={classes.arrow}
-                onClick={this.handlearrow}
-              />
-              <span> </span>
-            Applicant details
-          </Typography>
-          </Grid>
+         
 
           <Paper className={classes.OutPaper}>
             <div className={classes.searchBtnRight}>
               <Grid item xs={12}>
-                <h1 className={classes.restaurentname}>Mouj Restaurants</h1>
+                <h1 className={classes.restaurentname}>{this.state.result.restaurant_name}</h1>
 
               </Grid>
-              <span className={classes.restaurentdetails}>Fine Dining - Beverages, Chinese, Fast Food, Ice Cream, Juices, Maharashtrian, North Indian
+              <span className={classes.restaurentdetails}>
 
 
+              {this.state.result.restaurant_phone}
+</span>
+<span className={classes.restaurentdetails}>
 
 
+              {this.state.result.restaurant_website}
 </span>
               <br></br>
-              <span className={classes.restaurentdetails}>Akola Locality</span>
+              <span className={classes.restaurentdetails}>               {this.state.result.price_range}
+</span>
               <br></br>
-              <span className={classes.restaurentdetails}> Open now
-              8am – 10pm (Today)
+              <span className={classes.restaurentdetails}> 
+              
+              {this.state.result.hours}
 </span>
               <br />
               <Button variant="contained" className={classes.buttonprev}>Add Review </Button>
@@ -223,9 +157,7 @@ class Restaurentdetails extends Component {
               <Button variant="contained" className={classes.buttonprev}>Share</Button>
 
             </div>
-            
-          </Paper>
-          {
+            {
               this.state.menuItemsList.map(item => {
                 return item.menu_sections.map(item2 => {
                   return item2.menu_items.map(item3 => {
@@ -267,6 +199,8 @@ class Restaurentdetails extends Component {
                 })
               })
             }
+          </Paper>
+          
         </div>
       </div >
     );

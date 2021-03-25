@@ -67,6 +67,7 @@ class Home extends Component {
     super(props);
     this.state = {
       dataArray:[],
+      searchTerm:""
     };
   }
  
@@ -137,6 +138,7 @@ class Home extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                onChange={(event)=>{this.setState({searchTerm:event})}}
                 className={classes.selectEmpty}
                 InputProps={{
                   disableUnderline: true,
@@ -149,8 +151,13 @@ class Home extends Component {
               />
             </Grid>
           </div>
-
-          {this.state.dataArray.map((data,index) => (
+          {this.state.dataArray.filter((data)=>{
+if(this.state.searchTerm == ""){
+  return data
+}else if (data.restaurent_name.toLowerCase().includes(this.state.searchTerm.toLowerCase())){
+  return data
+}
+          }).map((data,index) => (
               <Grid item xs={12} md={6} className = {classes.space} onClick={this.handleClick.bind(this,data)}>
               <Card variant="outlined" className={classes.CardStyle}>
                 <CardContent className={classes.CardContent}>
